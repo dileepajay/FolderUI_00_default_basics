@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Editor (Popup)</title>
+  <style>
+    body {
+      background: #ccc;
+      font-family: sans-serif;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    #editor-canvas {
+      background: #fff;
+      border: 1px solid #000;
+      margin-top: 20px;
+    }
+    #toolbar {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Photo Editor Popup</h1>
+
+<canvas id="editor-canvas"></canvas>
+
+<div id="toolbar">
+  <!-- Basic "Done" or "Save" button -->
+  <button id="saveBtn">DONE</button>
+</div>
+
+<script>
+// Parse query string parameters: ?width=800&height=600&images=["...","..."]
+const params = new URLSearchParams(window.location.search);
+const canvasWidth = parseInt(params.get("width")) || 800;
+const canvasHeight = parseInt(params.get("height")) || 600;
+let imagesParam = params.get("images");
+if (imagesParam) {
+  try {
+    imagesParam = JSON.parse(imagesParam); // convert from string to array
+  } catch (err) {
+    imagesParam = [];
+  }
+} else {
+  imagesParam = [];
+}
+
+// 1. Setup the canvas
+const canvas = document.getElementById("editor-canvas");
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
+const ctx = canvas.getContext("2d");
+
+// 2. Load given images (very simple approach: just draw them in order)
+imagesParam.forEach((url, idx) => {
+  const img = new Image();
+  img.onload = () => {
+    // This logic is super naive: just draws images top-left in sequence
+    ctx.drawImage(img, 0, 0);
+    // More advanced approach: create separate layers, use drag/resize, etc.
+  };
+  img.src = url;
+});
+
+// 3. Editor Logic (very minimal):
+//    In a real editor, you'd have your layers, tools, etc.
+//    We'll skip details and assume the user can do some editing in this page.
+
+// 4. On "DONE", we create a final image from the canvas
+document.getElementById("saveBtn").addEventListener("click", function() {
+  // Convert canvas content to base64 Data URL (PNG by default)
+  const finalDataURL = canvas.toDataURL("image/png");
+
+  // 5. Call parent's callback. Make sure the parent is accessible (if the user didn’t block popups).
+  if (window.opener && typeof window.opener.handleEditedImage === "function") {
+    window.opener.handleEditedImage(finalDataURL);
+  } else {
+    alert("Could not find parent callback function!");
+  }
+
+  // 6. Optionally close this popup
+  window.close();
+});
+</script>
+
+</body>
+</html>

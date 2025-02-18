@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Page</title>
+</head>
+<body>
+
+<h1>Home Page</h1>
+
+<button id="editBtn">EDIT</button>
+
+<script>
+// Example data
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
+const IMAGE_URLS = [
+  "https://via.placeholder.com/400x300",
+  "https://via.placeholder.com/200x200"
+];
+
+// We define a global callback for demonstration
+// In practice, you might store this in a custom object or handle it more elegantly.
+function handleEditedImage(finalImageData) {
+  console.log("Received edited image data from popup:", finalImageData);
+  alert("Image editing complete! Check the console for base64 data.");
+}
+
+// Called when user clicks the EDIT button
+function openEditor() {
+  // Construct a query string or use window.name, localStorage, etc.
+  // Let’s keep it simple and pass basic info in the URL. 
+  // You could also pass them in sessionStorage or localStorage for bigger data.
+
+  const w = CANVAS_WIDTH;
+  const h = CANVAS_HEIGHT;
+  const images = encodeURIComponent(JSON.stringify(IMAGE_URLS));
+
+  // E.g.: photo-editor.html?width=800&height=600&images=["img1","img2"]
+  // We'll rely on the child to parse these parameters.
+  const url = `photo-editor.html?width=${w}&height=${h}&images=${images}`;
+  
+  // Open the popup
+  // "editorWin" can be used if we need a reference to the window (e.g. close it from parent).
+  window.editorWin = window.open(url, "photoEditorPopup", "width=1200,height=800");
+
+  // Expose your callback on the global window object
+  // so the child window can call: window.opener.handleEditedImage(...).
+  window.handleEditedImage = handleEditedImage;
+}
+
+document.getElementById("editBtn").addEventListener("click", openEditor);
+</script>
+
+</body>
+</html>

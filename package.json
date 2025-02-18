@@ -1,0 +1,40 @@
+{
+    "plugins": [
+        {
+            "ui_name": "open",
+            "ui_description": "",
+            "ui_category": "",
+            "name": "open",
+            "action": [
+                {
+                    "package": "self",
+                    "type": "js_popup",
+                    "function": "js_parameters"
+                }
+            ],
+            "parameters": [
+                {
+                    "type": "input_file",
+                    "name": "base image",
+                    "default": "",
+                    "tooltip": "Enter multi-line text input",
+                    "multiline": true,
+                    "readonly": false,
+                    "required": true,
+                    "multiply": true,
+                    "file_types": [
+                        "jpg",
+                        "png",
+                        "txt",
+                        "jpeg",
+                        "bmp",
+                        "gif",
+                        "tiff",
+                        "webp",
+                        "glb"
+                    ]
+                }
+            ]
+        }
+    ]
+}

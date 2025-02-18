@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Photo Editor (Drag & Resize Images)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="photo-editor-container">
+
+  <!-- LEFT TOOLBAR -->
+  <div id="toolbar">
+    <button class="tool-btn" onclick="ToolManager.setActiveTool('hand')">Hand</button>
+    <button class="tool-btn" onclick="ToolManager.setActiveTool('select')">Select</button>
+    <button class="tool-btn" onclick="ToolManager.setActiveTool('pen')">Pen</button>
+    <button class="tool-btn" onclick="ToolManager.setActiveTool('text')">Text</button>
+    <!-- Optionally a "Move/Resize" tool if you want a dedicated tool -->
+  </div>
+
+  <!-- CANVAS -->
+  <div id="canvas-area">
+    <canvas id="editor-canvas" width="800" height="600"></canvas>
+  </div>
+
+  <!-- RIGHT PANEL: Toolkit + Layers -->
+  <div id="right-panel">
+    <div id="toolkit"></div>
+
+    <!-- LAYER ACTIONS -->
+    <div id="layers-controls" style="margin-bottom: 1rem;">
+      <button onclick="UIController.addEmptyLayer()">Add Empty Layer</button>
+      <button onclick="UIController.addImageLayer()">Add Image Layer</button>
+      <button onclick="UIController.removeSelectedLayer()">Remove Layer</button>
+    </div>
+
+    <!-- LAYERS LIST -->
+    <div id="layers-list"></div>
+  </div>
+
+</div>
+
+<!-- JS Scripts -->
+<script src="js/canvasManager.js"></script>
+<script src="js/layersManager.js"></script>
+<script src="js/toolManager.js"></script>
+<script src="js/uiController.js"></script>
+<script>
+window.onload = function() {
+  CanvasManager.initCanvas('editor-canvas');
+  LayersManager.initLayersManager(); // background layer
+  UIController.initUIController();
+  ToolManager.initToolManager();
+};
+</script>
+
+</body>
+</html>
